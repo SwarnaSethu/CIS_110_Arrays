@@ -86,6 +86,15 @@ int[] grades = new int[GRADE_SIZE];
 char[] codes = new char[4];
 ```
 
+Here, `4` directly sets the array size. You can also put the size in a named constant:
+
+```csharp
+const int CODE_SIZE = 4;
+char[] codes = new char[CODE_SIZE];
+```
+
+Both versions create an array with four elements (indexes `0` through `3`). A named constant is helpful when the size needs a meaningful name or is used in several places. For a size used only once, writing the number directly is also fine.
+
 When an array is created with `new`, its elements start with the default value for their type:
 
 | Element type | Default value |
@@ -441,3 +450,4 @@ Complete the cost column, then add a loop that calculates and displays the total
 - Use `foreach` when you need to read every value and do not need its index.
 - To find a maximum or minimum, initialize it from an actual array element.
 - Parallel arrays use matching indexes to keep related values together.
+
