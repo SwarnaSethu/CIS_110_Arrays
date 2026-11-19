@@ -8,33 +8,33 @@
 By the end of this lesson, you should be able to:
 
 - Explain what an array is and why it is useful.
-- Create an array with a fixed size or with an initializer.
+- Create an array with a fixed size or an initializer.
 - Read and change an element using its index.
-- Use `for` and `foreach` loops to work with array elements.
+- Choose between `for` and `foreach` loops to work with array elements.
 - Calculate a sum and average, find a maximum and minimum, and count matches.
 - Use parallel arrays to keep related information together.
 
 ## 1. What is an array?
 
-A **variable** stores a value. For example, `temperature` stores one `double` value:
+A **variable** stores a value. For example:
 
 ```csharp
 double temperature = 95.75;
 ```
 
-An **array** is a variable that stores multiple values of the **same type** under one name. Each stored value is an **element**.
+An **array** is a variable that stores multiple values of the **same type** under one name. Each stored value is called an **element**.
 
 ```csharp
 double[] temps = { 95.75, 83.0, 97.624, 72.5, 86.25 };
 ```
 
-Here, `temps` is an array containing five temperatures. This is easier to manage than five separate variables such as `temp1`, `temp2`, and `temp3`. With an array, a loop can visit every temperature.
+Here, `temps` is an array containing five temperatures. It is easier to manage than five separate variables such as `temp1`, `temp2`, and `temp3`. A loop can visit every element in the array.
 
-### Why arrays?
+### Why use an array?
 
-Suppose a program reads five daily temperatures, calculates their average, and displays each temperature above that average. Without an array, you need five variables and repeated calculations and `if` statements. For 365 days, that approach becomes very long. An array lets the program use one name and a loop, no matter how many values it needs to process.
+Suppose a program reads five daily temperatures, calculates their average, and displays each temperature above that average. Without an array, you would need five variables and repeated calculations and `if` statements. For 365 days, that approach becomes very long. An array lets the program use one name and a loop, no matter how many values it processes.
 
-**Think about it:** Which parts of the five-temperature program would need to be repeated if you used separate variables?
+**Think about it:** Which parts of a five-temperature program would need to be repeated if you used separate variables?
 
 ## 2. Elements, indexes, and `Length`
 
@@ -77,7 +77,7 @@ const int TEMP_SIZE = 5;
 double[] temps = new double[TEMP_SIZE];
 ```
 
-The constant gives the size a clear name. You can use the same pattern for other types:
+A named constant gives the size a clear name. You can use the same pattern for other types:
 
 ```csharp
 const int GRADE_SIZE = 6;
@@ -86,14 +86,14 @@ int[] grades = new int[GRADE_SIZE];
 char[] codes = new char[4];
 ```
 
-Here, `4` directly sets the array size. You can also put the size in a named constant:
+Here, `4` directly sets the size of the `codes` array. You could also put the size in a named constant:
 
 ```csharp
 const int CODE_SIZE = 4;
 char[] codes = new char[CODE_SIZE];
 ```
 
-Both versions create an array with four elements (indexes `0` through `3`). A named constant is helpful when the size needs a meaningful name or is used in several places. For a size used only once, writing the number directly is also fine.
+Both versions create an array with four elements, at indexes 0 through 3. A named constant is helpful when the size needs a meaningful name or is used in several places. If you use the size only once, writing the number directly is also fine.
 
 When an array is created with `new`, its elements start with the default value for their type:
 
@@ -136,7 +136,7 @@ Assume these statements run in order. What values are in the following elements 
 | `temps[2]` | |
 | `temps[3]` | |
 
-**Careful:** An out-of-range index may compile successfully, but the program will throw an `IndexOutOfRangeException` when it tries to access that element.
+**Careful:** An out-of-range index may compile successfully, but the program throws an `IndexOutOfRangeException` when it tries to access that element.
 
 ## 5. Creating an array with an initializer
 
@@ -169,7 +169,7 @@ for (int i = 0; i < arrayName.Length; i++)
 }
 ```
 
-Notice the condition is `i < arrayName.Length`, not `i <= arrayName.Length`. The last valid index is one less than the length.
+The condition is `i < arrayName.Length`, not `i <= arrayName.Length`. The last valid index is one less than the length.
 
 ### Example: read, sum, and display five temperatures
 
@@ -268,7 +268,7 @@ For the sample temperatures, this displays:
 Highest: 97.624   Lowest: 72.5
 ```
 
-The loop starts at index 1 because index 0 was already used to initialize `max` and `min`. Starting at 0 would also work, but it would compare the first element to itself unnecessarily. Starting `max` and `min` at 0 is not a sound general approach: the values might all be negative or all be greater than zero.
+The loop starts at index 1 because index 0 was already used to initialize `max` and `min`. Starting at 0 would also work, but it would compare the first element with itself unnecessarily. Starting `max` and `min` at 0 is not a sound general approach: the values might all be negative or all greater than zero.
 
 ### Trace the search
 
@@ -280,25 +280,69 @@ The loop starts at index 1 because index 0 was already used to initialize `max` 
 | `i = 3` | 72.5 | | |
 | `i = 4` | 86.25 | | |
 
-## 8. Reading with `foreach`
+## 8. Choosing between `for` and `foreach`
 
-A `foreach` loop gives you each element's value in order. Use it when you need to read every element but do not need its index.
+Both loops can visit every element in an array. The difference is what the loop gives you:
+
+- A `for` loop gives you an **index** (a position number), such as `i`.
+- A `foreach` loop gives you each **value** in order, without an index.
+
+### Use `for` when you need the position or want to change elements
+
+Because `for` gives you the index, you can use it to display an element's position:
+
+```csharp
+for (int i = 0; i < temps.Length; i++)
+{
+    Console.WriteLine($"Day {i + 1}: {temps[i]}");
+}
+```
+
+Here, `i` identifies the array position. `i + 1` displays the day as 1 through 5, even though the indexes are 0 through 4.
+
+Use `for` when you need to change the values stored in the array:
+
+```csharp
+for (int i = 0; i < temps.Length; i++)
+{
+    temps[i] = 0;
+}
+```
+
+This sets each array element to zero. The index lets the program say exactly which element to change.
+
+### Use `foreach` when you only need each value
+
+A `foreach` loop is a simpler choice when you want to read every value and do not need its position. For example, display all the temperatures:
+
+```csharp
+foreach (double temp in temps)
+{
+    Console.WriteLine(temp);
+}
+```
+
+Or add them together:
 
 ```csharp
 double total = 0;
-foreach (double t in temps)
+foreach (double temp in temps)
 {
-    total += t;
+    total += temp;
 }
 ```
+
+The variable `temp` holds the current value for that pass through the loop. It is not an index. Assigning a new value to `temp` does not change the value stored in the array.
+
+### A quick way to choose
+
+Ask yourself: **Do I need to know the element's position, or change the element in the array?** If yes, use `for`. If you only need to read each value, `foreach` is usually easier.
 
 | `for` | `foreach` |
 |---|---|
 | Gives you an index, such as `i` | Gives you each value directly |
-| Useful when you need to change an element or use its position | Useful for reading, summing, counting, or displaying values |
-| Can visit a chosen range of indexes | Visits each element in order |
-
-A `foreach` iteration variable is a copy of the element's value. Assigning to that variable does not change the array element.
+| Use when position matters or you need to change array elements | Use when reading, summing, counting, or displaying values |
+| You control which indexes the loop visits | Visits each element in order |
 
 ## 9. Counting matching values
 
@@ -366,7 +410,7 @@ Output:
 
 Sometimes each item has several pieces of information. **Parallel arrays** store those pieces in separate arrays, using the same index for information about the same item.
 
-For example, `prices[3]`, `quantity[3]`, and `cost[3]` all describe item 4 (index 3). The arrays must have the same length and stay in the same order.
+For example, `prices[3]`, `quantities[3]`, and `costs[3]` all describe item 4 (index 3). The arrays must have the same length and stay in the same order.
 
 This program reads the price and quantity for five items, calculates each item's cost, then displays a table:
 
@@ -444,10 +488,9 @@ Complete the cost column, then add a loop that calculates and displays the total
 
 - An **array** stores many values of the same type under one name.
 - Each value is an **element**. Its index starts at 0.
-- For an array of length `Length`, the valid indexes are `0` through `Length - 1`.
+- For an array of length `Length`, valid indexes are `0` through `Length - 1`.
 - Use `new dataType[size]` to create an array with a set size. Use `{ ... }` to create and fill an array with known values.
 - Use `for (int i = 0; i < array.Length; i++)` when you need the index or need to change elements.
 - Use `foreach` when you need to read every value and do not need its index.
 - To find a maximum or minimum, initialize it from an actual array element.
 - Parallel arrays use matching indexes to keep related values together.
-
